@@ -90,8 +90,7 @@ def load_real_samples():
     X = trainX.astype('float32')
     # scale from [0,255] to [-1,1]
     X = (X - 127.5) / 127.5
-    print('aaaaaaaaaaaaa')
-    print(type(X))
+    
     return X
 
 def load_simpsons_data(dir_path):
@@ -172,8 +171,8 @@ def summarize_performance(epoch, g_model, d_model, dataset, latent_dim, n_sample
     # save plot
     save_plot(x_fake, epoch)
     # save the generator model tile file
-    filename = './output/generator_model_%03d.h5' % (epoch+1)
-    g_model.save(filename)
+    #filename = './output/generator_model_%03d.h5' % (epoch+1)
+    #g_model.save(filename)
 
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=200, n_batch=128):
@@ -182,7 +181,7 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=200, n_batc
     # manually enumerate epochs
     for i in range(n_epochs):
         # enumerate batches over the training set
-        #for j in range(bat_per_epo):
+     
         t = tqdm(enumerate(range(bat_per_epo)), total=bat_per_epo)
         for j, id_ in t:
             # get randomly selected 'real' samples
@@ -201,8 +200,6 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=200, n_batc
             g_loss = gan_model.train_on_batch(X_gan, y_gan)
             # summarize loss on this batch
             t.set_description('>Epoch =%d, d_loss_r=%.3f, d_loss_f=%.3f, g_loss=%.3f' % (i+1, d_loss1, d_loss2, g_loss))
-#            print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
-#                  (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
         # evaluate the model performance, sometimes
         if (i+1) % 10 == 0:
             summarize_performance(i, g_model, d_model, dataset, latent_dim)
@@ -216,6 +213,6 @@ g_model = define_generator(latent_dim)
 # create the gan
 gan_model = define_gan(g_model, d_model)
 # load image data
-dataset = load_simpsons_data('./cropped')#load_real_samples()
+dataset = load_simpsons_data('/home/danilo/cropped')#load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim)
